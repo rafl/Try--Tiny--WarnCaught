@@ -13,10 +13,10 @@ use Sub::Exporter -setup => {
 
 sub catch (&;@) {
     my $cb = shift;
-    Try::Tiny::catch {
+    Try::Tiny::catch(sub {
         warn "Caught exception: ", $_;
         $cb->(@_);
-    };
+    }, @_);
 }
 
 __END__

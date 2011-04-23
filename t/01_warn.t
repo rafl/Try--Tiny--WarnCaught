@@ -32,4 +32,22 @@ use Try::Tiny::WarnCaught;
         "exceptions get dumped partially";
 }
 
+{
+    my $i = 0;
+
+    my $should_warn = sub {
+        try {
+            die { foo => 42 };
+        } catch {
+            1;
+        } finally {
+            $i++;
+        }
+    };
+
+    warning_is { $should_warn->() } "Caught exception: { foo: 42 }",
+        "exceptions get dumped partially";
+    is $i, 1, 'blocks following our catch are still executed';
+}
+
 done_testing;
